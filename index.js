@@ -9,7 +9,6 @@ const PORT = 8080;
 //Middleware
 app.use(express.json());
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 // MySQL-тэй холбогдох тохиргоо
 const db = mysql.createConnection({
@@ -35,10 +34,14 @@ app.get("/", (request, response) => {
 app.post("/createUsers", (req, res) => {
   const { first_name, last_name, age, email } = req.body;
 
+  if (!first_name || !last_name || !age || !email) {
+    return res.status(400).json({ error: "Мэдээлэл дутуу байна." });
+  }
+
   console.log("iishe orjin");
 
   db.query(
-    "insert into users (first_name, last_name, age, email, created_at) values (?, ?, ?, ?, current_timestamp)",
+    "insert into users (first_name, last_name, age, email, created_at) values (?, ?, ?, ?, current_timestamp())",
     [first_name, last_name, age, email],
     (err, results) => {
       if (err) {
