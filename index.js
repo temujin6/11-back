@@ -14,8 +14,8 @@ app.use(cors());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "test",
-  database: "backEnd",
+  password: "Temvjin0606$",
+  database: "backEndB",
 });
 
 // MySQL-тэй холбогдож байгаа эсэхийг шалгах
@@ -29,6 +29,16 @@ db.connect((err) => {
 
 app.get("/", (request, response) => {
   response.send("Server ajillaj bn !!!");
+});
+
+app.get("/users", (request, response) => {
+  db.query("select * from users", (err, results) => {
+    if (err) {
+      response.status(500).json({ error: err.message });
+    } else {
+      response.json(results);
+    }
+  });
 });
 
 app.post("/createUsers", (req, res) => {
